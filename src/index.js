@@ -6,7 +6,15 @@ dotenv.config({
     path:"./env"
 });
 
-DBconnect();
+DBconnect()
+.then(()=>{
+   app.listen(process.env.PORT || 8000 , ()=>{
+    console.log(`Database is Conncted ${process.env.PORT || 8000}`);
+   })
+})
+.catch((error)=>{
+    console.log(`Database  is not Connected ${error}` );
+})
 
 
 
