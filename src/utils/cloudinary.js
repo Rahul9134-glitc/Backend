@@ -25,3 +25,6 @@ const uploadOnCloudinary = async (localpath) => {
      fs.unlinkSync(localpath); //remove the locally saved temprory as the operation got failed
   }
 };
+
+
+export {uploadOnCloudinary}
