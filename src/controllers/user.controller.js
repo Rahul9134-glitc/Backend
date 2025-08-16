@@ -6,9 +6,6 @@ import { ApiResponse } from '../utils/apiResponse.js';
 
 const registerUser = asyncHandler(async (req, res) => {
   const { username, fullname, password, email } = req.body;
-  console.log(fullname);
-  console.log(password);
-
   if (
     [fullname, username, password, email].some(
       (feilds) => feilds?.trim() === ''

@@ -22,7 +22,13 @@ const uploadOnCloudinary = async (localpath) => {
     return response;
 
   } catch (error) {
-     fs.unlinkSync(localpath); //remove the locally saved temprory as the operation got failed
+    fs.unlinkSync(localpath); //remove the locally saved temprory as the operation got failed
+    console.error("❌ Cloudinary upload failed" , error.message);
+    return null;
+  }
+  finally{
+      //always doing localfile clear .
+      if (fs.existsSync(localpath)) fs.unlinkSync(localpath);
   }
 };
 
