@@ -5,7 +5,8 @@ import { uploadOnCloudinary } from '../utils/cloudinary.js';
 import { ApiResponse } from '../utils/apiResponse.js';
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, fullname, password, email } = req.body;
+  const { username, fullname, password, email ,  } = req.body;
+    
   if (
     [fullname, username, password, email].some(
       (feilds) => feilds?.trim() === ''
@@ -14,16 +15,23 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'All feilds are required');
   }
 
-  const ExistsUser = User.findOne({
+  const ExistsUser = await User.findOne({
     $or: [{ username }, { email }],
   });
 
   if (ExistsUser) {
-    throw ApiError(409, 'Username and email aleady exist');
+    throw new ApiError(400, 'Username and email aleady exist');
   }
 
-  const avatarLocalPath = req.files?.avatar[0]?.path;
-  const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  console.log(req.files)
+
+  const avatarLocalPath = req.files?.avatar?.[0]?.path;
+  // const coverImageLocalPath = req.files?.coverImage?.[0]?.path;  //that is optional this logic already work
+  let coverImageLocalPath;
+
+  if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage > 0 ){
+     coverImageLocalPath = req.files.coverImage[0].path
+  }
 
   if (!avatarLocalPath) {
     throw new ApiError(400, 'Avatar file is required ');
@@ -32,8 +40,10 @@ const registerUser = asyncHandler(async (req, res) => {
   const avatar = await uploadOnCloudinary(avatarLocalPath);
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
+  console.log(avatar);
+
   if (!avatar) {
-    throw ApiError(400, 'Avatar is required');
+    throw new  ApiError(400, 'Avatar is required');
   }
 
   const user = await User.create({
@@ -49,7 +59,7 @@ const registerUser = asyncHandler(async (req, res) => {
     '-password -refreshToken'
   );
   if (!createdUser) {
-    throw ApiError(500, 'Some went wrong while registering user');
+    throw new  ApiError(500, 'Some went wrong while registering user');
   }
 
   return res
