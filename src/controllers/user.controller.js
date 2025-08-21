@@ -21,15 +21,13 @@ const generateAccessTokenAndRefreshAcessToken = async (userId) => {
   } catch (error) {
     throw new ApiError(
       500,
-      'Something went wrogn while generate refresh and acess token'
+      'Internal Server Error : Unable to generate tokens' 
     );
   }
 };
 
 const registerUser = asyncHandler(async (req, res) => {
   const { username, fullname, password, email } = req.body;
-
-  console.log(email);
 
   if (
     [fullname, username, password, email].some(
@@ -111,7 +109,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const isPasswordValid = await user.isPasswordCorrect(password);
 
   if (!isPasswordValid) {
-    throw new ApiError(401, 'Invalid Password Crenditial');
+    throw new ApiError(401, 'Invalid Credentials');
   }
 
   const { accessToken, refreshToken } =
