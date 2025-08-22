@@ -33,4 +33,22 @@ const uploadOnCloudinary = async (localpath) => {
 };
 
 
-export {uploadOnCloudinary}
+const deleteCloudinary = async (publicId)=>{
+   if(!publicId){
+     console.log("PublicID is missing . Cannot delete resource");
+     return null;
+   }
+
+   try{
+     const result = await cloudinary.uploader.destroy(publicId);
+     console.log(`Resource with publicId ${publicId} delete Successfully` , result);
+     return result
+
+   }catch(error){  
+    console.error(`While deleting resources from cloudinary with publicId ${publicId}`, error.message)
+    return null;
+   }
+}
+
+
+export {uploadOnCloudinary , deleteCloudinary}
