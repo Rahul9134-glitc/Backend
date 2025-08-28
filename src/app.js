@@ -33,6 +33,9 @@ app.use(cookieParser());
 import UserRouter from "./routes/user.routes.js"
 import CommentRouter from "./routes/comment.routes.js"
 import VideoRouter from "./routes/video.routes.js"
+
+
+
 app.use("/api/v1/users" , UserRouter);
 app.use("/api/v1/comments" , CommentRouter);
 app.use("/api/v1/videos" , VideoRouter )
